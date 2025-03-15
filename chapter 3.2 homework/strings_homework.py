@@ -36,7 +36,7 @@ def remove_duplicates(s):
     for i in s:
         if i not in new_s:
            new_s += i
-    # Можно решить через  new_s = "".join(sorted(set(s), key=s.index))
+    # Можно решить через new_s = "".join(sorted(set(s), key=s.index))
     return new_s
 
 print(remove_duplicates("programming")) # "progamin”
