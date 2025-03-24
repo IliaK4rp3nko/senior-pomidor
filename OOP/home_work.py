@@ -35,16 +35,16 @@ class SavingsAccount(BankAccount): # Класс для начисления пр
 
 
 class CheckingAccount(BankAccount):
-    def withdraw(self, amount): # Позволяет снимать суммы баже если они превышаю остаток на счету
-        self.withdraw(amount)
-        return self.get_balance
+    def withdraw(self, amount):  
+        self._BankAccount__balance -= amount  # Получаем доступ к приватному атриуду
+        # балланса родительского класса и списываем сумму с него
+        return self.get_balance()
 
 
 bank_account = SavingsAccount("Ilia", 0)
 bank_account.deposit(500)
 bank_account.withdraw(100)
-bank_account.apply_interest
+bank_account.apply_interest()
 
 def test_positive_balance():
     assert bank_account.get_balance() > 0
-
