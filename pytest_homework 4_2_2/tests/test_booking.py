@@ -60,21 +60,30 @@ class TestBookings:
         assert any("bookingid" in i for i in bookings)
     
     # GET: бронирование по параметрам
-    def test_get_bookings_with_query(self, booking_data, auth_session):
+    def test_get_bookings_sorted_by_name(self, booking_data, auth_session):
         create_booking = auth_session.post(
             f"{BASE_URL}/booking", json=booking_data
         )
         assert create_booking.status_code == 200
         
-        get_booking_wiwh_parameters = auth_session.get(
+        get_booking_wiwh_sorted_by_name = auth_session.get(
             f"{BASE_URL}/booking?firstname={booking_data['firstname']}&"
             f"lastname={booking_data['lastname']}"
         )
-        assert get_booking_wiwh_parameters.status_code == 200, "Статус ответа не 200"
-        bookings = get_booking_wiwh_parameters.json()
+        assert get_booking_wiwh_sorted_by_name.status_code == 200, "Статус ответа не 200"
+        bookings = get_booking_wiwh_sorted_by_name.json()
         assert isinstance(bookings, list), "В ответе ожидаем список со словарями"
         assert len(bookings) > 0, "Список бронирований пуст"
         
+    def test_get_bookings_sorted_by_date(self, booking_data, auth_session):
+        get_booking_sorted_by_date = auth_session.get(
+        f"{BASE_URL}/booking?checkin={booking_data['bookingdates']['checkin']}&"
+        f"checkout={booking_data['bookingdates']['checkout']}")
+        assert get_booking_sorted_by_date.status_code == 200, "Статус ответа не 200"
+        bookings = get_booking_sorted_by_date.json()
+        assert isinstance(bookings, list), "В ответе ожидаем список со словарями"
+        assert len(bookings) > 0, "Список бронирований пуст"
+
         response_fail = auth_session.get(
             f"{BASE_URL}/booking?firstname='test_user'"
         )
